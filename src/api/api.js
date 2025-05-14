@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL, MOVIES } from "../constants";
+import { API_URL, MOVIES, BOOKINGS_STORAGE_KEY } from "../constants";
 import { v4 as uuidv4 } from "uuid";
 
 // Create axios instance with retry logic
@@ -31,9 +31,6 @@ api.interceptors.response.use(null, async (error) => {
   await delayRetry;
   return api(config);
 });
-
-// LocalStorage keys
-const BOOKINGS_STORAGE_KEY = "cinema_bookings";
 
 // Helper functions for localStorage with error handling
 const getBookingsFromStorage = () => {
@@ -81,7 +78,10 @@ export const fetchBookedSeats = async (movieId) => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 500));
     const bookings = getBookingsFromStorage();
-    return bookings.filter((booking) => booking.movieId === parseInt(movieId));
+    const filteredBookings = bookings.filter(
+      (booking) => booking.movieId === parseInt(movieId)
+    );
+    return filteredBookings;
   } catch (error) {
     throw new Error("Не вдалося отримати інформацію про заброньовані місця");
   }
@@ -110,33 +110,6 @@ export const bookSeats = async ({ movieId, seats, email }) => {
     return newBooking;
   } catch (error) {
     throw new Error("Не вдалося створити бронювання");
-  }
-};
-
-export const cancelBooking = async (bookingId) => {
-  try {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const bookings = getBookingsFromStorage();
-    const updatedBookings = bookings.filter(
-      (booking) => booking.id !== bookingId
-    );
-    saveBookingsToStorage(updatedBookings);
-    return { success: true };
-  } catch (error) {
-    throw new Error("Не вдалося скасувати бронювання");
-  }
-};
-
-export const fetchUserBookings = async (email) => {
-  try {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const bookings = getBookingsFromStorage();
-    return bookings.filter((booking) => booking.email === email);
-  } catch (error) {
-    throw new Error("Не вдалося отримати історію бронювань");
   }
 };
 

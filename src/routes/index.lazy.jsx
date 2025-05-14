@@ -1,18 +1,19 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMovies } from "../api/hooks/useMovies";
 import styles from "./index.module.css";
 import { Link } from "@tanstack/react-router";
-import { MOVIES } from "../constants";
 import Skeleton from "../components/Skeleton/Skeleton";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: moviesData, isLoading, error } = useMovies();
 
-  const filteredMovies = moviesData?.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredMovies = useMemo(() => {
+    return moviesData?.filter((movie) =>
+      movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [moviesData, searchQuery]);
 
   if (isLoading) {
     return (
@@ -58,7 +59,7 @@ const Home = () => {
       </div>
       <h1 className={styles.title}>Фільми в прокаті</h1>
       <div className={styles.movieGrid}>
-        {(filteredMovies || MOVIES).map((movie) => (
+        {filteredMovies.map((movie) => (
           <Link
             key={movie.id}
             to="/booking/$movieId"

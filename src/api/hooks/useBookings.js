@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getBookings, bookSeats, cancelBooking } from "../api";
+import { getBookings, bookSeats } from "../api";
 
 export const useBookings = (movieId) => {
   const queryClient = useQueryClient();
@@ -16,14 +16,6 @@ export const useBookings = (movieId) => {
     },
   });
 
-  const { mutate: cancelBookingMutation, isPending: isCancelling } =
-    useMutation({
-      mutationFn: cancelBooking,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["bookings"] });
-      },
-    });
-
   const movieBookings = movieId
     ? bookings.filter((booking) => booking.movieId === parseInt(movieId))
     : bookings;
@@ -32,8 +24,6 @@ export const useBookings = (movieId) => {
     bookings: movieBookings,
     isLoading,
     bookSeats: bookSeatsMutation,
-    cancelBooking: cancelBookingMutation,
     isBooking,
-    isCancelling,
   };
 };

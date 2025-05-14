@@ -22,7 +22,7 @@ const Booking = () => {
     isBooking,
   } = useBookings(movieId);
 
-  const movie = movies?.find((m) => m.id === parseInt(movieId));
+  const movie = movies?.find((movie) => movie.id === parseInt(movieId));
 
   const handleSeatSelect = (seatNumber) => {
     setSelectedSeats((prev) => {

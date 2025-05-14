@@ -1,5 +1,3 @@
-export const API_URL = "http://localhost:5173/";
-
 import interstellar from "./assets/interstellar.jpg";
 import dark_knight from "./assets/the_dark_knight.jpg";
 import the_lord_of_the_rings from "./assets/lord_of_rings.jpg";
@@ -159,3 +157,6 @@ export const MOVIES = [
     session: "2025-04-23T21:00",
   },
 ];
+
+export const API_URL = "http://localhost:5173/";
+export const BOOKINGS_STORAGE_KEY = "cinema_bookings";
