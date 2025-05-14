@@ -55,15 +55,6 @@ const saveBookingsToStorage = (bookings) => {
   }
 };
 
-// Custom error class for API errors
-class APIError extends Error {
-  constructor(message, code) {
-    super(message);
-    this.name = "APIError";
-    this.code = code;
-  }
-}
-
 // API functions with improved error handling
 export const fetchMovies = async () => {
   try {
@@ -71,10 +62,7 @@ export const fetchMovies = async () => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return MOVIES;
   } catch (error) {
-    throw new APIError(
-      "Не вдалося завантажити список фільмів",
-      "FETCH_MOVIES_ERROR"
-    );
+    throw new Error("Не вдалося завантажити список фільмів");
   }
 };
 
@@ -84,10 +72,7 @@ export const getBookings = async () => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return getBookingsFromStorage();
   } catch (error) {
-    throw new APIError(
-      "Не вдалося отримати список бронювань",
-      "GET_BOOKINGS_ERROR"
-    );
+    throw new Error("Не вдалося отримати список бронювань");
   }
 };
 
@@ -98,10 +83,7 @@ export const fetchBookedSeats = async (movieId) => {
     const bookings = getBookingsFromStorage();
     return bookings.filter((booking) => booking.movieId === parseInt(movieId));
   } catch (error) {
-    throw new APIError(
-      "Не вдалося отримати інформацію про заброньовані місця",
-      "FETCH_BOOKED_SEATS_ERROR"
-    );
+    throw new Error("Не вдалося отримати інформацію про заброньовані місця");
   }
 };
 
@@ -111,10 +93,7 @@ export const bookSeats = async ({ movieId, seats, email }) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (!movieId || !seats || !email) {
-      throw new APIError(
-        "Відсутні обов'язкові поля для бронювання",
-        "INVALID_BOOKING_DATA"
-      );
+      throw new Error("Відсутні обов'язкові поля для бронювання");
     }
 
     const bookings = getBookingsFromStorage();
@@ -130,10 +109,7 @@ export const bookSeats = async ({ movieId, seats, email }) => {
     saveBookingsToStorage(bookings);
     return newBooking;
   } catch (error) {
-    if (error instanceof APIError) {
-      throw error;
-    }
-    throw new APIError("Не вдалося створити бронювання", "BOOK_SEATS_ERROR");
+    throw new Error("Не вдалося створити бронювання");
   }
 };
 
@@ -149,10 +125,7 @@ export const cancelBooking = async (bookingId) => {
     saveBookingsToStorage(updatedBookings);
     return { success: true };
   } catch (error) {
-    throw new APIError(
-      "Не вдалося скасувати бронювання",
-      "CANCEL_BOOKING_ERROR"
-    );
+    throw new Error("Не вдалося скасувати бронювання");
   }
 };
 
@@ -163,10 +136,7 @@ export const fetchUserBookings = async (email) => {
     const bookings = getBookingsFromStorage();
     return bookings.filter((booking) => booking.email === email);
   } catch (error) {
-    throw new APIError(
-      "Не вдалося отримати історію бронювань",
-      "FETCH_USER_BOOKINGS_ERROR"
-    );
+    throw new Error("Не вдалося отримати історію бронювань");
   }
 };
 

@@ -5,7 +5,7 @@ import { ToastContainer, Bounce } from "react-toastify";
 
 export const Route = createRootRoute({
   component: () => (
-    <>
+    <ErrorBoundary>
       <Header />
       <hr />
       <Outlet />
@@ -23,6 +23,6 @@ export const Route = createRootRoute({
         transition={Bounce}
       />
       <TanStackRouterDevtools />
-    </>
+    </ErrorBoundary>
   ),
 });
