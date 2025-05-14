@@ -8,92 +8,94 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
+import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const BookingLazyImport = createFileRoute("/booking")();
-const IndexLazyImport = createFileRoute("/")();
+const IndexLazyImport = createFileRoute('/')()
+const BookingMovieIdLazyImport = createFileRoute('/booking/$movieId')()
 
 // Create/Update Routes
 
-const BookingLazyRoute = BookingLazyImport.update({
-  id: "/booking",
-  path: "/booking",
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/booking.lazy").then((d) => d.Route));
-
 const IndexLazyRoute = IndexLazyImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const BookingMovieIdLazyRoute = BookingMovieIdLazyImport.update({
+  id: '/booking/$movieId',
+  path: '/booking/$movieId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/booking.$movieId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexLazyImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/booking": {
-      id: "/booking";
-      path: "/booking";
-      fullPath: "/booking";
-      preLoaderRoute: typeof BookingLazyImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/booking/$movieId': {
+      id: '/booking/$movieId'
+      path: '/booking/$movieId'
+      fullPath: '/booking/$movieId'
+      preLoaderRoute: typeof BookingMovieIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexLazyRoute;
-  "/booking": typeof BookingLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/booking/$movieId': typeof BookingMovieIdLazyRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexLazyRoute;
-  "/booking": typeof BookingLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/booking/$movieId': typeof BookingMovieIdLazyRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexLazyRoute;
-  "/booking": typeof BookingLazyRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/booking/$movieId': typeof BookingMovieIdLazyRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/booking";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/booking";
-  id: "__root__" | "/" | "/booking";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/booking/$movieId'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/booking/$movieId'
+  id: '__root__' | '/' | '/booking/$movieId'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute;
-  BookingLazyRoute: typeof BookingLazyRoute;
+  IndexLazyRoute: typeof IndexLazyRoute
+  BookingMovieIdLazyRoute: typeof BookingMovieIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  BookingLazyRoute: BookingLazyRoute,
-};
+  BookingMovieIdLazyRoute: BookingMovieIdLazyRoute,
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -102,14 +104,14 @@ export const routeTree = rootRoute
       "filePath": "__root.jsx",
       "children": [
         "/",
-        "/booking"
+        "/booking/$movieId"
       ]
     },
     "/": {
       "filePath": "index.lazy.jsx"
     },
-    "/booking": {
-      "filePath": "booking.lazy.jsx"
+    "/booking/$movieId": {
+      "filePath": "booking.$movieId.lazy.jsx"
     }
   }
 }

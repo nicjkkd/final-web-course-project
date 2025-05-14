@@ -1,17 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { memo } from "react";
+import styles from "./Header.module.css";
 
 const Header = () => {
   return (
-    <div className="p-2 flex gap-2">
-      <Link to="/" className="[&.active]:font-bold">
-        Home
-      </Link>{" "}
-      <Link to="/booking" className="[&.active]:font-bold">
-        Booking
-      </Link>{" "}
-    </div>
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <Link to="/" className={styles.logo}>
+          Lumen
+        </Link>
+        <nav className={styles.nav}>
+          <Link to="/" className={styles.navLink}>
+            Фільми
+          </Link>
+        </nav>
+      </div>
+    </header>
   );
 };
 
-export default memo(Header);
+export default Header;
