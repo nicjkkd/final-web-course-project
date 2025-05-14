@@ -133,7 +133,7 @@ export const MOVIES = [
     id: 14,
     title: "Паразити",
     description:
-      "Бідна сім’я хитро проникає в життя багатої родини, що призводить до трагічних подій.",
+      "Бідна сім'я хитро проникає в життя багатої родини, що призводить до трагічних подій.",
     genre: "Трилер, Драма",
     poster: parasite,
     session: "2025-04-22T20:00",
@@ -158,5 +158,4 @@ export const MOVIES = [
   },
 ];
 
-export const API_URL = "http://localhost:5173/";
 export const BOOKINGS_STORAGE_KEY = "cinema_bookings";
