@@ -1,36 +1,5 @@
-import axios from "axios";
-import { API_URL, MOVIES, BOOKINGS_STORAGE_KEY } from "../constants";
+import { MOVIES, BOOKINGS_STORAGE_KEY } from "../constants";
 import { v4 as uuidv4 } from "uuid";
-
-// Create axios instance with retry logic
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 5000,
-  retry: 3,
-  retryDelay: 1000,
-});
-
-// Add retry interceptor
-api.interceptors.response.use(null, async (error) => {
-  const { config } = error;
-  if (!config || !config.retry) {
-    return Promise.reject(error);
-  }
-
-  config.retryCount = config.retryCount || 0;
-
-  if (config.retryCount >= config.retry) {
-    return Promise.reject(error);
-  }
-
-  config.retryCount += 1;
-  const delayRetry = new Promise((resolve) => {
-    setTimeout(resolve, config.retryDelay || 1000);
-  });
-
-  await delayRetry;
-  return api(config);
-});
 
 // Helper functions for localStorage with error handling
 const getBookingsFromStorage = () => {
@@ -112,6 +81,3 @@ export const bookSeats = async ({ movieId, seats, email }) => {
     throw new Error("Не вдалося створити бронювання");
   }
 };
-
-// Export API instance for potential future use
-export default api;
