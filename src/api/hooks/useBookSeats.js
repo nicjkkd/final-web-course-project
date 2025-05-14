@@ -4,10 +4,12 @@ import { bookSeats } from "../api";
 export const useBookSeats = (movieId) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const bookSeatsMutation = useMutation({
     mutationFn: bookSeats,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookedSeats", movieId] });
     },
   });
+
+  return bookSeatsMutation;
 };
