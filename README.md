@@ -1,12 +1,159 @@
-# React + Vite
+# Lumen
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-застосунок для моделювання роботи кінотеатру, що дозволяє користувачам переглядати картки фільмів, вибирати місця в залі та бронювати квитки.
 
-Currently, two official plugins are available:
+## Технології
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** — UI-бібліотека
+- **TanStack Router** — маршрутизація
+- **React Query (TanStack Query)** — асинхронні запити, кешування
+- **CSS Modules** — локальні стилі
+- **localStorage** — зберігання даних бронювань
+- **react-toastify** — сповіщення
+- **Yarn 2 (Plug'n'Play)** — управління залежностями
 
-## Expanding the ESLint configuration
+## Архітектура
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Структура проєкту
+
+```
+src/
+├── api/              # API та хуки для роботи з даними
+│   ├── api.js       # Основний API-клієнт
+│   └── hooks/       # Кастомні хуки для роботи з API
+│       ├── useMovies.js      # Хук для роботи з фільмами
+│       ├── useBookings.js    # Хук для роботи з бронюваннями
+│       ├── useBookSeats.js   # Хук для бронювання місць
+│       └── useBookedSeats.js # Хук для отримання заброньованих місць
+├── assets/          # Статичні ресурси
+├── components/      # React компоненти
+│   ├── BookingForm/   # Форма бронювання
+│   ├── CinemaHall/    # Компонент кінозалу
+│   ├── Header/        # Компонент шапки
+│   ├── MovieCard/     # Картка фільму
+│   ├── MovieList/     # Список фільмів
+│   └── Skeleton/      # Компонент для стану завантаження
+├── hooks/           # Загальні кастомні хуки
+│   └── useDateFormat.js # Хук для форматування дат
+├── routes/          # Маршрути та сторінки
+│   ├── __root.jsx     # Кореневий компонент маршрутизації
+│   ├── index.lazy.jsx # Головна сторінка
+│   ├── booking.$movieId.lazy.jsx # Сторінка бронювання
+│   ├── index.module.css # Стилі головної сторінки
+│   └── booking.module.css # Стилі сторінки бронювання
+├── constants.js     # Константи проєкту
+├── index.css       # Глобальні стилі
+├── main.jsx        # Точка входу
+└── routeTree.gen.ts # Згенеровані типи маршрутів
+```
+
+### Принципи розділення логіки
+
+1. **Компонентна архітектура**
+
+   - Кожен UI-блок винесено в окремий компонент
+   - Компоненти розділені за відповідальністю
+   - Використання `React.memo` для оптимізації ререндерів
+
+2. **Управління станом**
+
+   - Локальний стан через `useState` для UI-компонентів
+   - Глобальний стан через React Query для даних
+   - Оптимізація через `useCallback` та `useMemo`
+
+3. **Кастомні хуки**
+   - API-хуки для роботи з даними
+   - Утилітарні хуки для форматування
+
+## Маршрутизація
+
+Проєкт використовує TanStack Router для навігації:
+
+- **Головна сторінка** (`/`) — список фільмів
+- **Сторінка бронювання** (`/booking/:movieId`) — форма бронювання квитків
+- Лейзи-завантаження компонентів для оптимізації
+- Динамічні параметри маршрутів через `useParams`
+
+## Стилі
+
+- **CSS Modules** для ізоляції стилів компонентів
+- Мінімалістичний дизайн
+- Адаптивна верстка через медіа-запити
+- Глобальні стилі в `index.css`
+
+## Основні модулі
+
+### API та хуки
+
+- `api.js` — основний API-клієнт
+- `useMovies` — отримання списку фільмів
+- `useBookings` — робота з бронюваннями
+- `useBookSeats` — бронювання місць
+- `useBookedSeats` — отримання заброньованих місць
+
+### Компоненти
+
+- `BookingForm` — форма бронювання з валідацією
+- `CinemaHall` — інтерактивна схема залу
+- `Header` — шапка сайту
+- `MovieCard` — картка фільму з деталями
+- `MovieList` — список фільмів
+- `Skeleton` — компонент для стану завантаження
+
+### Сторінки
+
+- Головна сторінка — список фільмів
+- Сторінка бронювання — форма бронювання та вибір місць
+
+## Встановлення
+
+1. Переконайтеся, що у вас встановлений Node.js та Yarn 2
+
+2. Клонуйте репозиторій:
+
+```bash
+git clone [url-репозиторію]
+```
+
+3. Встановіть залежності:
+
+```bash
+yarn install
+```
+
+## Запуск проєкту
+
+### Розробка
+
+```bash
+yarn dev
+```
+
+### Збірка
+
+```bash
+yarn build
+```
+
+### Попередній перегляд збірки
+
+```bash
+yarn preview
+```
+
+## Приклад використання
+
+1. Відкрийте головну сторінку для перегляду списку фільмів
+2. Виберіть фільм для перегляду деталей
+3. На сторінці бронювання:
+   - Виберіть місця в кінозалі
+   - Заповніть форму бронювання
+   - Підтвердіть бронювання
+
+## Особливості реалізації
+
+- Інтерактивна схема залу з вибором місць
+- Валідація форми бронювання
+- Збереження бронювань у localStorage
+- Адаптивний дизайн для різних пристроїв
+- Оптимізація продуктивності через мемоізацію

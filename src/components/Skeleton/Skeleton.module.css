@@ -1,0 +1,45 @@
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.movieCard {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.title {
+  width: 60%;
+  height: 24px;
+  margin-bottom: 16px;
+}
+
+.text {
+  width: 100%;
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  margin: 4px;
+}
+
+.formGroup {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 16px;
+}
