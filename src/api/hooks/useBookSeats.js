@@ -7,7 +7,6 @@ export const useBookSeats = (movieId) => {
   return useMutation({
     mutationFn: bookSeats,
     onSuccess: () => {
-      // Invalidate and refetch booked seats
       queryClient.invalidateQueries({ queryKey: ["bookedSeats", movieId] });
     },
   });
