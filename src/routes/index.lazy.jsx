@@ -4,16 +4,19 @@ import { useMovies } from "../api/hooks/useMovies";
 import styles from "./index.module.css";
 import { Link } from "@tanstack/react-router";
 import Skeleton from "../components/Skeleton/Skeleton";
+import useDebouncedValue from "../hooks/useDebonced";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: moviesData, isLoading, error } = useMovies();
 
+  const debouncedSearchValue = useDebouncedValue(searchQuery, 100);
+
   const filteredMovies = useMemo(() => {
     return moviesData?.filter((movie) =>
-      movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+      movie.title.toLowerCase().includes(debouncedSearchValue.toLowerCase())
     );
-  }, [moviesData, searchQuery]);
+  }, [moviesData, debouncedSearchValue]);
 
   if (isLoading) {
     return (
